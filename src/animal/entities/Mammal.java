@@ -4,8 +4,8 @@ import animal.Animal;
 
 public class Mammal extends Animal {
 
-    public Mammal(String name, int age, int hunger, String mood, int health) {
-        super(name, age, hunger, mood, health);
+    public Mammal(String name, int age, int hunger, String mood, int health, String type, String species) {
+        super(name, age, hunger, mood, health, type, species);
     }
 
     @Override

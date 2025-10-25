@@ -1,6 +1,7 @@
 import animal.Animal;
 import animal.entities.Bird;
 import animal.entities.Mammal;
+import animal.entities.Reptile;
 import iterator.Aggregate;
 import iterator.AnimalIterator;
 import iterator.Iterator;
@@ -27,10 +28,10 @@ public class Zoo implements Aggregate<Animal> {
 
     public static void main(String[] args) {
         List<Animal> animals = new ArrayList<>();
-        animals.add(new Mammal("Lion", 4, 50, "HAPPY", 100));
-        animals.add(new Mammal("Tiger", 4, 55, "ANGRY", 120));
-        animals.add(new Bird("Eagle", 2, 15, "CALM", 200));
-        animals.add(new Bird("Parrot", 2, 1, "HAPPY", 50));
+        animals.add(new Mammal("Simba", 4, 50, "HAPPY", 100, "Cat", "lion"));
+        animals.add(new Bird("Polly", 2, 30, "EXCITED", 90, "Parrot", "macaw"));
+        animals.add(new Reptile("Rango", 3, 40, "CALM", 80, "Lizard", "iguana"));
+
 
         Zoo zoo = new Zoo(animals);
         Iterator<Animal> iterator = zoo.createIterator();
