@@ -1,0 +1,15 @@
+package animal.entities;
+
+import animal.Animal;
+
+public class Mammal extends Animal {
+
+    public Mammal(String name, int age, int hunger, String mood, int health) {
+        super(name, age, hunger, mood, health);
+    }
+
+    @Override
+    public void accept(visitor.Visitor visitor) {
+        visitor.visitMammal(this);
+    }
+}
