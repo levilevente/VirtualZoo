@@ -1,20 +1,22 @@
+package zoo;
+
 import animal.Animal;
-import animal.entities.Bird;
-import animal.entities.Mammal;
-import animal.entities.Reptile;
 import iterator.Aggregate;
 import iterator.AnimalIterator;
 import iterator.Iterator;
-import visitor.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Zoo implements Aggregate<Animal> {
-    private final List<Animal> animals = new ArrayList<>();
+public class VirtualZoo implements Aggregate<Animal> {
+    private List<Animal> animals = new ArrayList<>();
 
-    public Zoo(List<Animal> animals) {
+    public VirtualZoo(List<Animal> animals) {
         this.animals.addAll(animals);
+    }
+
+    public VirtualZoo() {
+        this.animals = new ArrayList<>();
     }
 
     public void addAnimal(Animal animal) {
@@ -26,14 +28,14 @@ public class Zoo implements Aggregate<Animal> {
         return new AnimalIterator(animals);
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         List<Animal> animals = new ArrayList<>();
         animals.add(new Mammal("Simba", 4, 50, "HAPPY", 100, "Cat", "lion"));
         animals.add(new Bird("Polly", 2, 30, "EXCITED", 90, "Parrot", "macaw"));
         animals.add(new Reptile("Rango", 3, 40, "CALM", 80, "Lizard", "iguana"));
 
 
-        Zoo zoo = new Zoo(animals);
+        zoo.VirtualZoo zoo = new zoo.VirtualZoo(animals);
         Iterator<Animal> iterator = zoo.createIterator();
 
         Visitor feedingVisitor = new visitor.concretevisitor.FeedingVisitor();
@@ -50,5 +52,5 @@ public class Zoo implements Aggregate<Animal> {
             System.out.println(animal);
             System.out.println("------------------------------\n");
         }
-    }
+    }*/
 }
