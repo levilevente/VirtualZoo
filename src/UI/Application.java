@@ -125,23 +125,23 @@ public class Application extends JFrame {
 
         zoo = new VirtualZoo();
         Bird bird1 = new Bird("Polly", 2, 30, "EXCITED", 90, "Parrot", "macaw");
-        Bird bird2 = new Bird("Tweety", 1, 20, "HAPPY", 95, "Canary", "canary");
+        Mammal tiger = new Mammal("Shir Khan", 1, 20, "ANGRY", 95, "Lion", "Bengal");
         Mammal mammal1 = new Mammal("Simba", 4, 50, "HAPPY", 100, "Cat", "lion");
         Reptile reptile1 = new Reptile("Rango", 3, 40, "CALM", 80, "Lizard", "iguana");
 
         RenderableAnimal renderableBird1 = new RenderableAnimal(bird1, 50, 50, "assets/images/parrot.png");
-        RenderableAnimal renderableBird2 = new RenderableAnimal(bird2, 300, 50, "assets/images/parrot.png");
-        RenderableAnimal renderableMammal = new RenderableAnimal(mammal1, 50, 150, "assets/images/lion.png");
-        RenderableAnimal renderableReptile = new RenderableAnimal(reptile1, 300, 150, "assets/images/turkey.png");
+        RenderableAnimal renderableMammal1 = new RenderableAnimal(tiger, 300, 50, "assets/images/tiger.png");
+        RenderableAnimal renderableMammal2 = new RenderableAnimal(mammal1, 50, 150, "assets/images/lion.png");
+        RenderableAnimal renderableReptile = new RenderableAnimal(reptile1, 300, 150, "assets/images/iguana.png");
 
         zoo.addAnimal(bird1);
-        zoo.addAnimal(bird2);
+        zoo.addAnimal(tiger);
         zoo.addAnimal(mammal1);
         zoo.addAnimal(reptile1);
 
         zooPanel.addRenderableAnimal(renderableBird1);
-        zooPanel.addRenderableAnimal(renderableBird2);
-        zooPanel.addRenderableAnimal(renderableMammal);
+        zooPanel.addRenderableAnimal(renderableMammal1);
+        zooPanel.addRenderableAnimal(renderableMammal2);
         zooPanel.addRenderableAnimal(renderableReptile);
 
         this.add(zooPanel, BorderLayout.CENTER);
