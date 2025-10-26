@@ -14,6 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Application extends JFrame {
     private VirtualZoo zoo;
@@ -31,21 +32,23 @@ public class Application extends JFrame {
             Iterator<RenderableAnimal> iterator = zooPanel.createIterator();
             Visitor feedingVisitor = new FeedingVisitor();
 
-            final RenderableAnimal[] previous = {null};
+            AtomicReference<RenderableAnimal> previous = new AtomicReference<>(null);
 
             Timer timer = new Timer(1000, null);
 
             timer.addActionListener(ev -> {
+
+                RenderableAnimal previousAnimal = previous.get();
                 if (iterator.hasNext()) {
                     // un-highlight previous
-                    if (previous[0] != null) {
-                        previous[0].setHighlighted(false);
+                    if (previousAnimal != null) {
+                        previousAnimal.setHighlighted(false);
                     }
 
                     // highlight current
                     RenderableAnimal renderable = iterator.next();
                     renderable.setHighlighted(true);
-                    previous[0] = renderable;
+                    previous.set(renderable);
 
                     // perform the "visit"
                     Animal animal = renderable.getAnimal();
@@ -55,8 +58,8 @@ public class Application extends JFrame {
                     zooPanel.repaint();
                 } else {
                     // un-highlight the last one and stop
-                    if (previous[0] != null) {
-                        previous[0].setHighlighted(false);
+                    if (previousAnimal != null) {
+                        previousAnimal.setHighlighted(false);
                     }
                     zooPanel.repaint();
                     timer.stop();
@@ -70,21 +73,22 @@ public class Application extends JFrame {
             Iterator<RenderableAnimal> iterator = zooPanel.createIterator();
             Visitor medicalVisitor = new visitor.concretevisitor.MedicalVisitor();
 
-            final RenderableAnimal[] previous = {null};
+            AtomicReference<RenderableAnimal> previous = new AtomicReference<>(null);
 
             Timer timer = new Timer(1000, null);
 
             timer.addActionListener(ev -> {
+                RenderableAnimal previousAnimal = previous.get();
                 if (iterator.hasNext()) {
                     // un-highlight previous
-                    if (previous[0] != null) {
-                        previous[0].setHighlighted(false);
+                    if (previousAnimal != null) {
+                        previousAnimal.setHighlighted(false);
                     }
 
                     // highlight current
                     RenderableAnimal renderable = iterator.next();
                     renderable.setHighlighted(true);
-                    previous[0] = renderable;
+                    previous.set(renderable);
 
                     // perform the "visit"
                     Animal animal = renderable.getAnimal();
@@ -94,8 +98,8 @@ public class Application extends JFrame {
                     zooPanel.repaint();
                 } else {
                     // un-highlight the last one and stop
-                    if (previous[0] != null) {
-                        previous[0].setHighlighted(false);
+                    if (previousAnimal != null) {
+                        previousAnimal.setHighlighted(false);
                     }
                     zooPanel.repaint();
                     timer.stop();
