@@ -11,9 +11,11 @@ import visitor.concretevisitor.FeedingVisitor;
 import zoo.VirtualZoo;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Application extends JFrame {
@@ -114,7 +116,7 @@ public class Application extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Mouse clicked at: (" + e.getX() + ", " + e.getY() + ")");
                 JMenuItem popupItem = new JMenuItem("Add new Animal");
-                popupItem.addActionListener(ae -> openAnimalForm(e.getX(), e.getY()));
+                popupItem.addActionListener(ae -> openAnimalForm(e.getX(), e.getY() - 100));
 
                 JPopupMenu popupMenu = new JPopupMenu();
                 popupMenu.add(popupItem);
@@ -124,25 +126,38 @@ public class Application extends JFrame {
         });
 
         zoo = new VirtualZoo();
-        Bird bird1 = new Bird("Polly", 2, 30, "EXCITED", 90, "Parrot", "macaw");
-        Mammal tiger = new Mammal("Shir Khan", 1, 20, "ANGRY", 95, "Lion", "Bengal");
-        Mammal mammal1 = new Mammal("Simba", 4, 50, "HAPPY", 100, "Cat", "lion");
-        Reptile reptile1 = new Reptile("Rango", 3, 40, "CALM", 80, "Lizard", "iguana");
+        Animal bird1 = new Bird("Polly", 2, 30, "EXCITED", 90, "Parrot", "macaw");
+        Animal tiger = new Mammal("Shir Khan", 1, 20, "ANGRY", 95, "Lion", "Bengal");
+        Animal mammal1 = new Mammal("Simba", 4, 50, "HAPPY", 100, "Cat", "lion");
+        Animal reptile1 = new Reptile("Rango", 3, 40, "CALM", 80, "Lizard", "iguana");
+        Animal cow = new Mammal("Bessie", 5, 60, "CALM", 85, "Cow", "Holstein");
+        Animal monkey = new Mammal("George", 2, 30, "PLAYFUL", 90, "Monkey", "Capuchin");
+        Animal ram = new Mammal("Dolly", 3, 40, "CURIOUS", 88, "Sheep", "Merino");
 
         RenderableAnimal renderableBird1 = new RenderableAnimal(bird1, 50, 50, "assets/images/parrot.png");
         RenderableAnimal renderableMammal1 = new RenderableAnimal(tiger, 300, 50, "assets/images/tiger.png");
-        RenderableAnimal renderableMammal2 = new RenderableAnimal(mammal1, 50, 150, "assets/images/lion.png");
-        RenderableAnimal renderableReptile = new RenderableAnimal(reptile1, 300, 150, "assets/images/iguana.png");
+        RenderableAnimal renderableMammal2 = new RenderableAnimal(mammal1, 550, 50, "assets/images/lion.png");
+        RenderableAnimal renderableReptile = new RenderableAnimal(reptile1, 50, 150, "assets/images/iguana.png");
+        RenderableAnimal renderableCow = new RenderableAnimal(cow, 300, 150, "assets/images/cow.png");
+        RenderableAnimal renderableMonkey = new RenderableAnimal(monkey, 550, 150, "assets/images/monkey.png");
+        RenderableAnimal renderableRam = new RenderableAnimal(ram, 50, 250, "assets/images/ram.png");
 
         zoo.addAnimal(bird1);
         zoo.addAnimal(tiger);
         zoo.addAnimal(mammal1);
         zoo.addAnimal(reptile1);
+        zoo.addAnimal(cow);
+        zoo.addAnimal(monkey);
+        zoo.addAnimal(ram);
 
         zooPanel.addRenderableAnimal(renderableBird1);
         zooPanel.addRenderableAnimal(renderableMammal1);
         zooPanel.addRenderableAnimal(renderableMammal2);
         zooPanel.addRenderableAnimal(renderableReptile);
+        zooPanel.addRenderableAnimal(renderableCow);
+        zooPanel.addRenderableAnimal(renderableMonkey);
+        zooPanel.addRenderableAnimal(renderableRam);
+
 
         this.add(zooPanel, BorderLayout.CENTER);
 
@@ -164,10 +179,42 @@ public class Application extends JFrame {
         JTextField healthField = new JTextField();
         JTextField typeField = new JTextField();
         JTextField speciesField = new JTextField();
+        JTextField imagePathField = new JTextField();
 
         String[] categories = {"Bird", "Mammal", "Reptile"};
         JComboBox<String> categoryBox = new JComboBox<>(categories);
-        JTextField imagePathField = new JTextField();
+
+        String[] moods = {"HAPPY", "SAD", "ANGRY", "CALM", "EXCITED", "PLAYFUL", "CURIOUS"};
+        JComboBox<String> moodBox = new JComboBox<>(moods);
+        moodField.setText("HAPPY");
+
+        String[] healthStatuses = {"100", "90", "80", "70", "60", "50", "40", "30", "20", "10", "0"};
+        JComboBox<String> healthBox = new JComboBox<>(healthStatuses);
+        healthField.setText("100");
+
+        String[] hungerLevels = {"0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"};
+        JComboBox<String> hungerBox = new JComboBox<>(hungerLevels);
+        hungerField.setText("0");
+
+        JButton browseButton = new JButton("Browse...");
+        JLabel imagePreview = new JLabel();
+        imagePreview.setPreferredSize(new Dimension(60, 60));
+        imagePreview.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+        browseButton.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setDialogTitle("Select Animal Image");
+            chooser.setFileFilter(new FileNameExtensionFilter(
+                    "Image files", "jpg", "jpeg", "png", "gif"
+            ));
+            chooser.setCurrentDirectory(new File("assets/images/"));
+
+            if (chooser.showOpenDialog(formDialog) == JFileChooser.APPROVE_OPTION) {
+                String selectedPath = chooser.getSelectedFile().getAbsolutePath();
+                imagePathField.setText(selectedPath);
+            }
+        });
+
         formDialog.add(new JLabel("Category:"));
         formDialog.add(categoryBox);
         formDialog.add(new JLabel("Name:"));
@@ -175,17 +222,19 @@ public class Application extends JFrame {
         formDialog.add(new JLabel("Age:"));
         formDialog.add(ageField);
         formDialog.add(new JLabel("Hunger:"));
-        formDialog.add(hungerField);
+        formDialog.add(hungerBox);
         formDialog.add(new JLabel("Mood:"));
-        formDialog.add(moodField);
+        formDialog.add(moodBox);
         formDialog.add(new JLabel("Health:"));
-        formDialog.add(healthField);
+        formDialog.add(healthBox);
         formDialog.add(new JLabel("Type:"));
         formDialog.add(typeField);
         formDialog.add(new JLabel("Species:"));
         formDialog.add(speciesField);
-        formDialog.add(new JLabel("Image Path:"));
-        formDialog.add(imagePathField);
+        formDialog.add(new JLabel("Image:"));
+        formDialog.add(browseButton);
+
+
         JButton submitButton = new JButton("Add Animal");
         submitButton.addActionListener(e -> {
             String category = (String) categoryBox.getSelectedItem();
