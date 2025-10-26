@@ -1,24 +1,69 @@
 package UI;
 
 
+import animal.Animal;
 import animal.entities.Bird;
 import animal.entities.Mammal;
 import animal.entities.Reptile;
+import iterator.Iterator;
+import visitor.Visitor;
+import visitor.concretevisitor.FeedingVisitor;
 import zoo.VirtualZoo;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class Application extends JFrame {
     private VirtualZoo zoo;
     private ZooPanel zooPanel;
+    private JButton feedButton;
+    private JButton healButton;
 
     public Application() throws HeadlessException {
         this.setLayout(new BorderLayout());
         this.zooPanel = new ZooPanel();
+        this.feedButton = new JButton("Feed All Animals");
+        this.healButton = new JButton("Heal All Animals");
+
+        this.feedButton.addActionListener(e -> {
+            Iterator<Animal> iterator = zoo.createIterator();
+            Visitor feedingVisitor = new FeedingVisitor();
+
+            Timer timer = new Timer(1000, null); // 1 second interval
+
+            timer.addActionListener(ev -> {
+                if (iterator.hasNext()) {
+                    Animal animal = iterator.next();
+                    animal.accept(feedingVisitor);
+                    zooPanel.repaint();
+                } else {
+                    timer.stop();
+                }
+            });
+
+            timer.start();
+        });
+
+        this.healButton.addActionListener(e -> {
+            Iterator<Animal> iterator = zoo.createIterator();
+            Visitor medicalVisitor = new visitor.concretevisitor.MedicalVisitor();
+
+            Timer timer = new Timer(1000, null); // 1 second interval
+
+            timer.addActionListener(ev -> {
+                if (iterator.hasNext()) {
+                    Animal animal = iterator.next();
+                    animal.accept(medicalVisitor);
+                    zooPanel.repaint();
+                } else {
+                    timer.stop();
+                }
+            });
+
+            timer.start();
+        });
 
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -56,6 +101,12 @@ public class Application extends JFrame {
         zooPanel.addRenderableAnimal(renderableReptile);
 
         this.add(zooPanel, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+        buttonPanel.add(feedButton);
+        buttonPanel.add(healButton);
+        this.add(buttonPanel, BorderLayout.NORTH);
     }
 
     private void openAnimalForm(int x, int y) {

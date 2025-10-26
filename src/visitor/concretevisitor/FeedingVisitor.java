@@ -8,19 +8,31 @@ import visitor.Visitor;
 public class FeedingVisitor implements Visitor {
     @Override
     public void visitReptile(Reptile reptile) {
-        reptile.setHunger(reptile.getHunger() - 10);
+        if (reptile.getHunger() >= 10) {
+            reptile.setHunger(reptile.getHunger() - 10);
+        } else {
+            reptile.setHunger(0);
+        }
         System.out.println("Feeding reptile: " + reptile.getName());
     }
 
     @Override
     public void visitMammal(Mammal mammal) {
-        mammal.setHunger(mammal.getHunger() - 15);
+        if (mammal.getHunger() >= 15) {
+            mammal.setHunger(mammal.getHunger() - 15);
+        } else {
+            mammal.setHunger(0);
+        }
         System.out.println("Feeding mammal: " + mammal.getName());
     }
 
     @Override
     public void visitBird(Bird bird) {
-        bird.setHunger(bird.getHunger() - 5);
+        if (bird.getHunger() >= 5) {
+            bird.setHunger(bird.getHunger() - 5);
+        } else {
+            bird.setHunger(0);
+        }
         System.out.println("Feeding bird: " + bird.getName());
     }
 

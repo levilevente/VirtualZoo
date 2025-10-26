@@ -8,19 +8,31 @@ import visitor.Visitor;
 public class MedicalVisitor implements Visitor {
     @Override
     public void visitReptile(Reptile reptile) {
-        reptile.setHealth(reptile.getHealth() + 10);
+        if (reptile.getHealth() <= 90) {
+            reptile.setHealth(reptile.getHealth() + 10);
+        } else {
+            reptile.setHealth(100);
+        }
         System.out.println("Providing medical care to reptile: " + reptile.getName());
     }
 
     @Override
     public void visitMammal(Mammal mammal) {
-        mammal.setHealth(mammal.getHealth() + 15);
+        if (mammal.getHealth() <= 85) {
+            mammal.setHealth(mammal.getHealth() + 15);
+        } else {
+            mammal.setHealth(100);
+        }
         System.out.println("Providing medical care to mammal: " + mammal.getName());
     }
 
     @Override
     public void visitBird(Bird bird) {
-        bird.setHealth(bird.getHealth() + 5);
+        if (bird.getHealth() <= 95) {
+            bird.setHealth(bird.getHealth() + 5);
+        } else {
+            bird.setHealth(100);
+        }
         System.out.println("Providing medical care to bird: " + bird.getName());
     }
 }

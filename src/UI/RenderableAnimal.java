@@ -45,4 +45,8 @@ public class RenderableAnimal {
     public void setY(int y) {
         this.y = y;
     }
+
+    public Animal getAnimal() {
+        return animal;
+    }
 }
