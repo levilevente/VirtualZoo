@@ -6,14 +6,21 @@ import iterator.RenderableAnimalIterator;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ZooPanel extends JPanel implements Aggregate<RenderableAnimal> {
     private List<RenderableAnimal> renderableAnimals;
+    private BufferedImage backgroundImage;
 
     public ZooPanel() {
         this.renderableAnimals = new ArrayList<>();
+        try {
+            backgroundImage = javax.imageio.ImageIO.read(new java.io.File("assets/grass.png"));
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addRenderableAnimal(RenderableAnimal renderableAnimal) {
@@ -24,6 +31,7 @@ public class ZooPanel extends JPanel implements Aggregate<RenderableAnimal> {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
         for (RenderableAnimal renderableAnimal : renderableAnimals) {
             int x = renderableAnimal.getX();
             int y = renderableAnimal.getY();
