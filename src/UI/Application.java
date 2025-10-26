@@ -28,17 +28,37 @@ public class Application extends JFrame {
         this.healButton = new JButton("Heal All Animals");
 
         this.feedButton.addActionListener(e -> {
-            Iterator<Animal> iterator = zoo.createIterator();
+            Iterator<RenderableAnimal> iterator = zooPanel.createIterator();
             Visitor feedingVisitor = new FeedingVisitor();
 
-            Timer timer = new Timer(1000, null); // 1 second interval
+            final RenderableAnimal[] previous = {null};
+
+            Timer timer = new Timer(1000, null);
 
             timer.addActionListener(ev -> {
                 if (iterator.hasNext()) {
-                    Animal animal = iterator.next();
+                    // un-highlight previous
+                    if (previous[0] != null) {
+                        previous[0].setHighlighted(false);
+                    }
+
+                    // highlight current
+                    RenderableAnimal renderable = iterator.next();
+                    renderable.setHighlighted(true);
+                    previous[0] = renderable;
+
+                    // perform the "visit"
+                    Animal animal = renderable.getAnimal();
                     animal.accept(feedingVisitor);
+
+                    // repaint after update
                     zooPanel.repaint();
                 } else {
+                    // un-highlight the last one and stop
+                    if (previous[0] != null) {
+                        previous[0].setHighlighted(false);
+                    }
+                    zooPanel.repaint();
                     timer.stop();
                 }
             });
@@ -47,17 +67,37 @@ public class Application extends JFrame {
         });
 
         this.healButton.addActionListener(e -> {
-            Iterator<Animal> iterator = zoo.createIterator();
+            Iterator<RenderableAnimal> iterator = zooPanel.createIterator();
             Visitor medicalVisitor = new visitor.concretevisitor.MedicalVisitor();
 
-            Timer timer = new Timer(1000, null); // 1 second interval
+            final RenderableAnimal[] previous = {null};
+
+            Timer timer = new Timer(1000, null);
 
             timer.addActionListener(ev -> {
                 if (iterator.hasNext()) {
-                    Animal animal = iterator.next();
+                    // un-highlight previous
+                    if (previous[0] != null) {
+                        previous[0].setHighlighted(false);
+                    }
+
+                    // highlight current
+                    RenderableAnimal renderable = iterator.next();
+                    renderable.setHighlighted(true);
+                    previous[0] = renderable;
+
+                    // perform the "visit"
+                    Animal animal = renderable.getAnimal();
                     animal.accept(medicalVisitor);
+
+                    // repaint after update
                     zooPanel.repaint();
                 } else {
+                    // un-highlight the last one and stop
+                    if (previous[0] != null) {
+                        previous[0].setHighlighted(false);
+                    }
+                    zooPanel.repaint();
                     timer.stop();
                 }
             });
@@ -86,9 +126,9 @@ public class Application extends JFrame {
         Reptile reptile1 = new Reptile("Rango", 3, 40, "CALM", 80, "Lizard", "iguana");
 
         RenderableAnimal renderableBird1 = new RenderableAnimal(bird1, 50, 50, "assets/images/parrot.png");
-        RenderableAnimal renderableBird2 = new RenderableAnimal(bird2, 200, 50, "assets/images/parrot.png");
-        RenderableAnimal renderableMammal = new RenderableAnimal(mammal1, 50, 200, "assets/images/lion.png");
-        RenderableAnimal renderableReptile = new RenderableAnimal(reptile1, 200, 200, "assets/images/turkey.png");
+        RenderableAnimal renderableBird2 = new RenderableAnimal(bird2, 300, 50, "assets/images/parrot.png");
+        RenderableAnimal renderableMammal = new RenderableAnimal(mammal1, 50, 150, "assets/images/lion.png");
+        RenderableAnimal renderableReptile = new RenderableAnimal(reptile1, 300, 150, "assets/images/turkey.png");
 
         zoo.addAnimal(bird1);
         zoo.addAnimal(bird2);

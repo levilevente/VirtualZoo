@@ -1,11 +1,15 @@
 package UI;
 
+import iterator.Aggregate;
+import iterator.Iterator;
+import iterator.RenderableAnimalIterator;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ZooPanel extends JPanel {
+public class ZooPanel extends JPanel implements Aggregate<RenderableAnimal> {
     private List<RenderableAnimal> renderableAnimals;
 
     public ZooPanel() {
@@ -39,6 +43,17 @@ public class ZooPanel extends JPanel {
             g.drawString("Mood: " + animal.getMood(), textX, textY + 15);
             g.drawString("Health: " + animal.getHealth() + "%", textX, textY + 30);
             g.drawString("Hunger: " + animal.getHunger() + "%", textX, textY + 45);
+
+            if (renderableAnimal.isHighlighted()) {
+                g.setColor(Color.RED);
+                g.drawRect(x - 2, y - 2, renderableAnimal.getImage().getWidth(this) + 4,
+                        renderableAnimal.getImage().getHeight(this) + 4);
+            }
         }
+    }
+
+    @Override
+    public Iterator<RenderableAnimal> createIterator() {
+        return new RenderableAnimalIterator(renderableAnimals);
     }
 }

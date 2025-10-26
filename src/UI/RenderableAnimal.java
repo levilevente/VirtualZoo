@@ -14,6 +14,7 @@ public class RenderableAnimal {
     private int y;
     private BufferedImage image;
     private Logger logger = Logger.getLogger(RenderableAnimal.class.getName());
+    private boolean isHighlighted = false;
 
     public RenderableAnimal(Animal animal, int x, int y, String imagePath) {
         this.animal = animal;
@@ -48,5 +49,13 @@ public class RenderableAnimal {
 
     public Animal getAnimal() {
         return animal;
+    }
+
+    public boolean isHighlighted() {
+        return isHighlighted;
+    }
+
+    public void setHighlighted(boolean highlighted) {
+        isHighlighted = highlighted;
     }
 }
