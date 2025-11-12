@@ -19,26 +19,23 @@ import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Application extends JFrame {
-    private VirtualZoo zoo;
-    private ZooPanel zooPanel;
-    private JButton feedButton;
-    private JButton healButton;
-    private JButton iterateButton;
+    private final VirtualZoo zoo;
+    private final ZooPanel zooPanel;
     private Iterator<RenderableAnimal> iterateAnimalsOnButtonPress;
-    private AtomicReference<RenderableAnimal> previousIterateAnimalsOnButtonPress;
+    private final AtomicReference<RenderableAnimal> previousIterateAnimalsOnButtonPress;
 
 
     public Application() throws HeadlessException {
         this.setLayout(new BorderLayout());
         this.zooPanel = new ZooPanel();
-        this.feedButton = new JButton("Feed All Animals");
-        this.healButton = new JButton("Heal All Animals");
-        this.iterateButton = new JButton("Iterate Animals");
+        JButton feedButton = new JButton("Feed All Animals");
+        JButton healButton = new JButton("Heal All Animals");
+        JButton iterateButton = new JButton("Iterate Animals");
 
         this.iterateAnimalsOnButtonPress = zooPanel.createIterator();
         this.previousIterateAnimalsOnButtonPress = new AtomicReference<>(null);
 
-        this.feedButton.addActionListener(e -> {
+        feedButton.addActionListener(e -> {
             Iterator<RenderableAnimal> iterator = zooPanel.createIterator();
             Visitor feedingVisitor = new FeedingVisitor();
 
@@ -79,7 +76,7 @@ public class Application extends JFrame {
             timer.start();
         });
 
-        this.healButton.addActionListener(e -> {
+        healButton.addActionListener(e -> {
             Iterator<RenderableAnimal> iterator = zooPanel.createIterator();
             Visitor medicalVisitor = new visitor.concretevisitor.MedicalVisitor();
 
@@ -119,7 +116,7 @@ public class Application extends JFrame {
             timer.start();
         });
 
-        this.iterateButton.addActionListener(e -> {
+        iterateButton.addActionListener(e -> {
 
             RenderableAnimal previousAnimal = previousIterateAnimalsOnButtonPress.get();
             if (previousAnimal != null) {
