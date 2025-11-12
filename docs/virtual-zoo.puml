@@ -1,0 +1,86 @@
+@startuml
+title Virtual Zoo - UML Class Diagram (inferred)
+
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+
+package "zoo" {
+  class VirtualZoo {
+    - animals: List<animal.Animal>
+    + VirtualZoo(animals: List<animal.Animal>)
+    + VirtualZoo()
+    + addAnimal(animal: animal.Animal)
+    + createIterator(): iterator.Iterator
+  }
+}
+
+package "animal" {
+  abstract class Animal {
+    - name: String
+    - age: int
+    - hunger: int
+    - mood: String
+    - health: int
+    - type: String
+    - species: String
+
+    +accept(visitor: visitor.Visitor)
+  }
+  class Mammal {
+      +accept(visitor: visitor.Visitor)
+  }
+  class Bird {
+      +accept(visitor: visitor.Visitor)
+  }
+  class Reptile {
+      +accept(visitor: visitor.Visitor)
+  }
+}
+
+package "iterator" {
+  interface Aggregate {
+    createIterator(): Iterator<T>
+  }
+  interface Iterator {
+    hasNext(): boolean
+    next(): T
+  }
+  class AnimalIterator {
+    - animals: List<animal.Animal>
+    - position: int
+    + AnimalIterator(animals: List<animal.Animal>)
+    + hasNext(): boolean
+    + next(): animal.Animal
+  }
+}
+
+package "visitor" {
+  interface Visitor {
+    + visitReptile(reptile: animal.Reptile)
+    + visitBird(bird: animal.Bird)
+    + visitMammal(mammal: animal.Mammal)
+  }
+  package "concretevisitor" {
+    class FeedingVisitor
+    class MedicalVisitor
+    class ReportVisitor
+  }
+}
+
+zoo.VirtualZoo ..|> iterator.Aggregate
+zoo.VirtualZoo ..> animal.Animal : uses
+zoo.VirtualZoo ..> iterator.AnimalIterator : creates
+iterator.AnimalIterator ..|> iterator.Iterator
+
+animal.Mammal --|> animal.Animal
+animal.Bird --|> animal.Animal
+animal.Reptile --|> animal.Animal
+
+animal.Animal ..> visitor.Visitor : accept(visitor)
+visitor.concretevisitor.FeedingVisitor ..|> visitor.Visitor
+visitor.concretevisitor.MedicalVisitor ..|> visitor.Visitor
+visitor.concretevisitor.ReportVisitor ..|> visitor.Visitor
+
+
+
+@enduml
