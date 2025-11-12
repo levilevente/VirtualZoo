@@ -23,12 +23,20 @@ public class Application extends JFrame {
     private ZooPanel zooPanel;
     private JButton feedButton;
     private JButton healButton;
+    private JButton iterateButton;
+    private Iterator<RenderableAnimal> iterateAnimalsOnButtonPress;
+    private AtomicReference<RenderableAnimal> previousIterateAnimalsOnButtonPress;
+
 
     public Application() throws HeadlessException {
         this.setLayout(new BorderLayout());
         this.zooPanel = new ZooPanel();
         this.feedButton = new JButton("Feed All Animals");
         this.healButton = new JButton("Heal All Animals");
+        this.iterateButton = new JButton("Iterate Animals");
+
+        this.iterateAnimalsOnButtonPress = zooPanel.createIterator();
+        this.previousIterateAnimalsOnButtonPress = new AtomicReference<>(null);
 
         this.feedButton.addActionListener(e -> {
             Iterator<RenderableAnimal> iterator = zooPanel.createIterator();
@@ -111,6 +119,25 @@ public class Application extends JFrame {
             timer.start();
         });
 
+        this.iterateButton.addActionListener(e -> {
+
+            RenderableAnimal previousAnimal = previousIterateAnimalsOnButtonPress.get();
+            if (previousAnimal != null) {
+                previousAnimal.setHighlighted(false);
+            }
+
+            if (iterateAnimalsOnButtonPress.hasNext()) {
+                RenderableAnimal renderable = iterateAnimalsOnButtonPress.next();
+                renderable.setHighlighted(!renderable.isHighlighted());
+                previousIterateAnimalsOnButtonPress.set(renderable);
+                zooPanel.repaint();
+            } else {
+                // Reset the iterator when done
+                iterateAnimalsOnButtonPress = zooPanel.createIterator();
+                previousIterateAnimalsOnButtonPress.set(null);
+            }
+        });
+
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -165,6 +192,7 @@ public class Application extends JFrame {
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.add(feedButton);
         buttonPanel.add(healButton);
+        buttonPanel.add(iterateButton);
         this.add(buttonPanel, BorderLayout.NORTH);
     }
 
