@@ -16,13 +16,14 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Application extends JFrame {
     private final VirtualZoo zoo;
     private final ZooPanel zooPanel;
     private Iterator<RenderableAnimal> iterateAnimalsOnButtonPress;
-    private final AtomicReference<RenderableAnimal> previousIterateAnimalsOnButtonPress;
+    private final AtomicReference<RenderableAnimal> previousIterateAnimalsOnButtonPress; // use atomic reference to allow modification within inner class
 
 
     public Application() throws HeadlessException {
@@ -130,6 +131,10 @@ public class Application extends JFrame {
                 zooPanel.repaint();
             } else {
                 // Reset the iterator when done
+                if (previousAnimal != null) {
+                    previousAnimal.setHighlighted(false);
+                }
+                zooPanel.repaint();
                 iterateAnimalsOnButtonPress = zooPanel.createIterator();
                 previousIterateAnimalsOnButtonPress.set(null);
             }
@@ -265,13 +270,14 @@ public class Application extends JFrame {
             String category = (String) categoryBox.getSelectedItem();
             String name = nameField.getText();
             int age = Integer.parseInt(ageField.getText());
-            int hunger = Integer.parseInt(hungerField.getText());
-            String mood = moodField.getText();
-            int health = Integer.parseInt(healthField.getText());
+            int hunger = Integer.parseInt((String) Objects.requireNonNull(hungerBox.getSelectedItem()));
+            String mood = (String) moodBox.getSelectedItem();
+            int health = Integer.parseInt((String) Objects.requireNonNull(healthBox.getSelectedItem()));
             String type = typeField.getText();
             String species = speciesField.getText();
             String imagePath = imagePathField.getText();
             addNewAnimal(category, name, age, hunger, mood, health, type, species, imagePath, x, y);
+            System.out.println("hunger: " + hunger + " health: " + health);
             formDialog.dispose();
         });
 

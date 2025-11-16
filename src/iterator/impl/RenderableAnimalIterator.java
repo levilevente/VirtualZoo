@@ -1,6 +1,7 @@
-package iterator;
+package iterator.impl;
 
 import UI.RenderableAnimal;
+import iterator.Iterator;
 
 import java.util.List;
 

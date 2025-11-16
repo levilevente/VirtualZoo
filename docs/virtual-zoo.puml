@@ -1,5 +1,5 @@
 @startuml
-title Virtual Zoo - UML Class Diagram (inferred)
+title Virtual Zoo - UML Class Diagram
 
 skinparam packageStyle rectangle
 skinparam classAttributeIconSize 0
@@ -12,6 +12,28 @@ package "zoo" {
     + addAnimal(animal: animal.Animal)
     + createIterator(): iterator.Iterator
   }
+}
+
+package UI {
+    class RenderableAnimal {
+        - animal: animal.Animal
+        - x: int
+        - y: int
+        - image: BufferedImage
+        - isHighlighted: boolean
+    }
+
+    class Application {
+        - zoo: zoo.VirtualZoo
+        - zooPanel: UI.ZooPanel
+        - iterateAnimalsOnButtonPress: iterator.Iterator<RenderableAnimal>
+    }
+
+    class ZooPanel {
+        renderableAnimals: List<UI.RenderableAnimal>
+        + paintComponent(g: Graphics)
+        + createIterator() iterator.Iterator<RenderableAnimal>
+    }
 }
 
 package "animal" {
@@ -52,6 +74,13 @@ package "iterator" {
     + hasNext(): boolean
     + next(): animal.Animal
   }
+  class RenderableAnimalIterator {
+    - renderableAnimals: List<UI.RenderableAnimal>
+    - position: int
+    + RenderableAnimalIterator(animals: List<animal.Animal>)
+    + hasNext(): boolean
+    + next(): animal.Animal
+  }
 }
 
 package "visitor" {
@@ -81,6 +110,9 @@ visitor.concretevisitor.FeedingVisitor ..|> visitor.Visitor
 visitor.concretevisitor.MedicalVisitor ..|> visitor.Visitor
 visitor.concretevisitor.ReportVisitor ..|> visitor.Visitor
 
+UI.ZooPanel ..|> iterator.Aggregate
+ZooPanel ..> iterator.RenderableAnimalIterator : creates
+iterator.RenderableAnimalIterator ..|> iterator.Iterator
 
 
 @enduml

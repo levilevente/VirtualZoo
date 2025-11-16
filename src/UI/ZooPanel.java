@@ -2,7 +2,7 @@ package UI;
 
 import iterator.Aggregate;
 import iterator.Iterator;
-import iterator.RenderableAnimalIterator;
+import iterator.impl.RenderableAnimalIterator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ZooPanel extends JPanel implements Aggregate<RenderableAnimal> {
-    private List<RenderableAnimal> renderableAnimals;
+    private final List<RenderableAnimal> renderableAnimals;
     private BufferedImage backgroundImage;
 
     public ZooPanel() {

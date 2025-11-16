@@ -2,7 +2,7 @@ package zoo;
 
 import animal.Animal;
 import iterator.Aggregate;
-import iterator.AnimalIterator;
+import iterator.impl.AnimalIterator;
 import iterator.Iterator;
 
 import java.util.ArrayList;
