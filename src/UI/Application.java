@@ -32,9 +32,32 @@ public class Application extends JFrame {
         JButton feedButton = new JButton("Feed All Animals");
         JButton healButton = new JButton("Heal All Animals");
         JButton iterateButton = new JButton("Iterate Animals");
+        JButton feedCurrentButton = new JButton("Feed Current Animal");
+        JButton healCurrentButton = new JButton("Heal Current Animal");
 
         this.iterateAnimalsOnButtonPress = zooPanel.createIterator();
         this.previousIterateAnimalsOnButtonPress = new AtomicReference<>(null);
+
+        final Visitor currentFeedingVisitor = new FeedingVisitor();
+        final Visitor currentMedicalVisitor = new visitor.concretevisitor.MedicalVisitor();
+
+        feedCurrentButton.addActionListener(e -> {
+            RenderableAnimal previousAnimal = previousIterateAnimalsOnButtonPress.get();
+            if (previousAnimal != null) {
+                Animal animal = previousAnimal.getAnimal();
+                animal.accept(currentFeedingVisitor);
+                zooPanel.repaint();
+            }
+        });
+
+        healCurrentButton.addActionListener(e -> {
+            RenderableAnimal previousAnimal = previousIterateAnimalsOnButtonPress.get();
+            if (previousAnimal != null) {
+                Animal animal = previousAnimal.getAnimal();
+                animal.accept(currentMedicalVisitor);
+                zooPanel.repaint();
+            }
+        });
 
         feedButton.addActionListener(e -> {
             Iterator<RenderableAnimal> iterator = zooPanel.createIterator();
@@ -195,6 +218,8 @@ public class Application extends JFrame {
         buttonPanel.add(feedButton);
         buttonPanel.add(healButton);
         buttonPanel.add(iterateButton);
+        buttonPanel.add(feedCurrentButton);
+        buttonPanel.add(healCurrentButton);
         this.add(buttonPanel, BorderLayout.NORTH);
     }
 
@@ -330,7 +355,7 @@ public class Application extends JFrame {
     public static void main(String[] args) {
         Application app = new Application();
         app.setTitle("Virtual Zoo Management System");
-        app.setSize(800, 600);
+        app.setSize(1000, 600);
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         app.setVisible(true);
     }
